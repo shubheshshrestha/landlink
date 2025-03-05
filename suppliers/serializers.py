@@ -4,4 +4,6 @@ from models import Supplier
 class SupplierSerializer(serializers.ModelSerializer):
     class Meta:
         model = Supplier
-        fields = ['user', 'company_name']
+        fields = ['id', 'user', 'company_name', 'address', 'phone_number']
+        read_only_fields = ['user']
+        

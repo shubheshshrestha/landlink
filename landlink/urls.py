@@ -18,12 +18,16 @@ from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from accounts.views import RegisterView, LoginView, NotificationView, AdminUserView
+from suppliers.views import SupplierView
+from products.views import ProductView
 
 router = DefaultRouter()
 router.register(r'users', AdminUserView, basename='admin-users')
 router.register(r'register', RegisterView, basename='register')
 router.register(r'login', LoginView, basename='login')
 router.register(r'notifications', NotificationView, basename='notifications')
+router.register(r'suppliers', SupplierView) # Use basename= when there is GenericViewSet
+router.register(r'products', ProductView)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
