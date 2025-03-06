@@ -15,4 +15,6 @@ class SupplierView(ModelViewSet):
         return Supplier.objects.filter(user=self.request.user)
     
     def perform_create(self, serializer):
+        if not serializer.validated_data.get('phone_number'):
+            raise serializer.ValidationError({'phone_number': 'This field is required.'})
         serializer.save(user=self.request.user)
