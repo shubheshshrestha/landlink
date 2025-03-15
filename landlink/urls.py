@@ -32,4 +32,5 @@ router.register(r'products', ProductView)
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)), # All API endpoints under /api/
+    # path('api/analytics/', include('analytics.urls')),
 ]

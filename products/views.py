@@ -2,15 +2,15 @@ from django.shortcuts import render
 from rest_framework import viewsets, permissions, filters
 from .models import Product
 from .serializers import ProductSerializer
-from suppliers.permissions import IsSupplierRole
+from suppliers.permissions import IsSupplier
 # from rest_framework.pagination import PageNumberPagination
 
 # Create your views here.
 
 class ProductView(viewsets.ModelViewSet):
-    queryset = Product.objects.all()
+    # queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [IsSupplierRole]
+    permission_classes = [IsSupplier]
     # pagination_class = PageNumberPagination
     # filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     # search_fields = ['name', 'description']
@@ -21,3 +21,4 @@ class ProductView(viewsets.ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(supplier=self.request.user)
+        

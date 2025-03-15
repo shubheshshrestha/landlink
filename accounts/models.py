@@ -13,11 +13,12 @@ class User(AbstractUser):
     ])
     
     def save(self, *args, **kwargs):
-        if self.role == 'Admin':
+        if self.role == 'Admin':  # if self.role in ['Admin', 'Supplier']
             self.is_staff = True
-            # self.is_superuser = True
+            self.is_superuser = True
         else:
             self.is_staff = False
+            self.is_superuser = False
         super().save(*args, **kwargs)
 
 # User Notifications

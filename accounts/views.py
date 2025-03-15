@@ -8,7 +8,8 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
-from .permissions import IsAdminRole #, IsDeliveryRole, IsSupplierRole
+from rest_framework.authentication import TokenAuthentication
+from .permissions import IsAdmin #, IsDelivery, IsSupplier
 
 # Create your views here.
 
@@ -49,18 +50,18 @@ class LoginView(GenericViewSet):
             token,_ = Token.objects.get_or_create(user=user) # Generate or retrieve token
             return Response({'token':token.key}, status=status.HTTP_200_OK)
 class NotificationView(ModelViewSet):
-    queryset = Notification.objects.all()
+    # queryset = Notification.objects.all()
     serializer_class = NotificationSerializer
-    permission_classes = [IsAdminRole]
+    authentication_classes = [TokenAuthentication]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         # Only show notification for logged-in user
         return Notification.objects.filter(user=self.request.user)
-    
 class AdminUserView(ModelViewSet):  # ReadOnlyModelViewSet if  only read access needed
     queryset = User.objects.filter(role='Admin')
     serializer_class = UserSerializer
-    permission_classes = [IsAdminRole] # Restrict access to users with role = Admin
+    permission_classes = [IsAdmin] # Restrict access to users with role = Admin
 
 # class SupplierView(ModelViewSet):
 #     queryset = 
