@@ -14,16 +14,16 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.contrib import admin
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from accounts.views import RegisterView, LoginView, NotificationView, AdminUserView
-from suppliers.views import SupplierView
-from products.views import ProductView
-from orders.views import OrderView
-from delivery.views import DeliveryPersonnelView, DeliveryView
-from customers.views import CustomerProfileView
-from inventory.views import InventoryLogView
+# from django.contrib import admin
+# from django.urls import path, include
+# from rest_framework.routers import DefaultRouter
+# from accounts.views import RegisterView, LoginView, NotificationView, AdminUserView
+# from suppliers.views import SupplierView
+# from products.views import ProductView
+# from orders.views import OrderView
+# from delivery.views import DeliveryPersonnelView, DeliveryView
+# from customers.views import CustomerProfileView
+# from inventory.views import InventoryLogView
 
 from django.contrib import admin
 from django.urls import path, include
@@ -45,11 +45,11 @@ urlpatterns = [
 # router.register(r'notifications', NotificationView, basename='notifications')
 # router.register(r'suppliers', SupplierView, basename='suppliers') # Use basename= when there is GenericViewSet
 # router.register(r'products', ProductView, basename='products')
+# router.register(r'inventory-log', InventoryLogView, basename='inventory-log')
 # router.register(r'orders', OrderView, basename='orders')
 # router.register(r'delivery', DeliveryView, basename='delivery')
 # router.register(r'delivery-personnel', DeliveryPersonnelView, basename='delivery-personnel')
 # router.register(r'customer-profile', CustomerProfileView, basename='customer-profile')
-# router.register(r'inventory-log', InventoryLogView, basename='inventory-log')
 
 # urlpatterns = [
 #     path('admin/', admin.site.urls),
