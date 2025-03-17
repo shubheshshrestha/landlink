@@ -20,14 +20,23 @@ from rest_framework.routers import DefaultRouter
 from accounts.views import RegisterView, LoginView, NotificationView, AdminUserView
 from suppliers.views import SupplierView
 from products.views import ProductView
+from orders.views import OrderView
+from delivery.views import DeliveryPersonnelView, DeliveryView
+from customers.views import CustomerProfileView
+from inventory.views import InventoryLogView
 
 router = DefaultRouter()
 router.register(r'users', AdminUserView, basename='admin-users')
 router.register(r'register', RegisterView, basename='register')
 router.register(r'login', LoginView, basename='login')
 router.register(r'notifications', NotificationView, basename='notifications')
-router.register(r'suppliers', SupplierView) # Use basename= when there is GenericViewSet
-router.register(r'products', ProductView)
+router.register(r'suppliers', SupplierView, basename='suppliers') # Use basename= when there is GenericViewSet
+router.register(r'products', ProductView, basename='products')
+router.register(r'orders', OrderView, basename='orders')
+router.register(r'delivery', DeliveryView, basename='delivery')
+router.register(r'delivery-personnel', DeliveryPersonnelView, basename='delivery-personnel')
+router.register(r'customer-profile', CustomerProfileView, basename='customer-profile')
+router.register(r'inventory-log', InventoryLogView, basename='inventory-log')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
