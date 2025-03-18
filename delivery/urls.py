@@ -4,7 +4,7 @@ from .views import DeliveryPersonnelView, DeliveryView
 
 router = DefaultRouter()
 
-router.register(r'delivery', DeliveryView, basename='delivery')
+router.register(r'deliveries', DeliveryView, basename='delivery')
 router.register(r'delivery-personnel', DeliveryPersonnelView, basename='delivery-personnel')
 
 urlpatterns = [

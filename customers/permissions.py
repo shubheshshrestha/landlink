@@ -2,7 +2,8 @@ from rest_framework import permissions
 
 class IsCustomer(permissions.BasePermission):
     def has_permission(self, request, view):
-        return request.user.is_authenticated and request.user.role == 'Customer'
+        # Check if user has a linked Supplier profile or has the 'Supplier' role
+        return (request.user.is_authenticated (hasattr(request.user, 'customerprofile') or request.user.role == 'Customer'))
     
 
 # # Recommendation:
