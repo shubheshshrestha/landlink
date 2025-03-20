@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import GenericViewSet, ModelViewSet, ReadOnlyModelViewSet
 from .models import Notification
 from .serializers import UserSerializer, LoginSerializer, NotificationSerializer
@@ -9,7 +9,7 @@ from rest_framework.authtoken.models import Token
 from django.contrib.auth import authenticate
 from django.contrib.auth import get_user_model
 from rest_framework.authentication import TokenAuthentication
-from .permissions import IsAdmin #, IsDelivery, IsSupplier
+# from .permissions import IsAdmin #, IsDelivery, IsSupplier
 
 # Create your views here.
 
@@ -58,10 +58,11 @@ class NotificationView(ModelViewSet):
     def get_queryset(self):
         # Only show notification for logged-in user
         return Notification.objects.filter(user=self.request.user)
-class AdminUserView(ModelViewSet):  # ReadOnlyModelViewSet if  only read access needed
-    queryset = User.objects.filter(role='Admin')
-    serializer_class = UserSerializer
-    permission_classes = [IsAdmin] # Restrict access to users with role = Admin
+    
+# class AdminUserView(ModelViewSet):  # ReadOnlyModelViewSet if  only read access needed
+#     queryset = User.objects.filter(role='Admin')
+#     serializer_class = UserSerializer
+#     permission_classes = [IsAdmin] # Restrict access to users with role = Admin
 
 # class SupplierView(ModelViewSet):
 #     queryset = 

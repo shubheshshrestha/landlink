@@ -15,14 +15,13 @@ class UserSerializer(serializers.ModelSerializer):
             },
             'username': {
                 'required': True
-            },
-            'is_staff': {
-                'required': False # Optional field in POST
-            }   
+            } 
         }
 
     def validate_password(self, value):
         # Validate password complexity requirements
+        # Validate password complexity requirements
+        # password_validation.validate_password(value)  # Use Django's built-in validators
         if len(value) < 8:
             raise serializers.ValidationError('Password must be at least 8 characters.')
         return value

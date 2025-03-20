@@ -27,3 +27,12 @@ class Delivery(models.Model):
 
     def __str__(self):
         return f"Delivery for order {self.order.id}"
+    
+    permissions = [
+            ('view_delivery', 'Can view delivery'),
+            ('add_delivery', 'Can add delivery'),
+            ('change_delivery', 'Can change delivery'),
+            ('delete_delivery', 'Can delete delivery'),
+            ('assign_delivery', 'Can assign delivery'),  # Custom permission
+            ('update_delivery_status', 'Can update delivery status'),  # Custom permission
+        ]
