@@ -8,8 +8,8 @@ class CustomerProfileSerializer(serializers.ModelSerializer):
     # user_details = serializers.SerializerMethodField()
     class Meta:
         model = CustomerProfile
-        fields = ['id', 'user', 'shipping_address', 'billing_address', 'phone_number']
-        read_only_fields = ['user']
+        fields = ['id', 'shipping_address', 'billing_address', 'phone_number']
+        read_only_fields = ['id']
 
     # def get_user_details(self, obj):
     #     return {

@@ -26,24 +26,35 @@ class InventoryLogView(viewsets.ModelViewSet):
             )
         else:
             return InventoryLog.objects.none()  #  Other users see none
-
     def create(self, request, *args, **kwargs):
-        if not request.user.has_perm('inventory.add_inventorylog'):
+        print("--- Create View ---")
+        print(f"Authentication Header: {request.META.get('HTTP_AUTHORIZATION')}")
+        print(f"User Authenticated: {request.user.is_authenticated}")
+        print(f"User: {request.user}")  #   Print the entire user object
+        print(f"User Permissions: {request.user.get_all_permissions()}")  #   Print all permissions
+
+        if not request.user.has_perm('inventory.can_add_inventorylog'):
+            print("Permission check failed!")  #  Indicate permission failure
             return Response(
                 {"error": "You do not have permission to add inventory logs."},
                 status=status.HTTP_403_FORBIDDEN
             )
+        print("Permission check passed!")  #  Indicate permission success
+        
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
         product = serializer.validated_data['product']
+        print(f"Product ID from request: {product.id}")  #  Print the product ID
 
         #   Check product ownership
         if product.supplier != request.user.supplier:  #  Use user.supplier
+            print("Product ownership check failed!")  #  Indicate ownership failure
             return Response(
                 {"error": "You do not own this product"},
                 status=status.HTTP_403_FORBIDDEN
             )
+        print("Product ownership check passed!")  #  Indicate ownership success
 
         action = serializer.validated_data['action']
         quantity = serializer.validated_data['quantity']
@@ -72,7 +83,8 @@ class InventoryLogView(viewsets.ModelViewSet):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
-
+        print(request.META.get('HTTP_AUTHORIZATION'))
+        print(request.user.is_authenticated)
 
 # from django.shortcuts import render
 # from rest_framework import viewsets, status

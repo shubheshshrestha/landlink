@@ -6,6 +6,8 @@ class  IsSupplier(permissions.BasePermission):
     
 class IsSupplierOrReadOnly(permissions.BasePermission):
     def has_permission(self, request, view):
-        if request.method in ['GET', 'HEAD', 'OPTIONS']:
+        if request.method in permissions.SAFE_METHODS:  # Use permissions.SAFE_METHODS # permissions.SAFE_METHODS is a built-in shortcut for ('GET', 'HEAD', 'OPTIONS')
             return True
-        return request.user.is_authenticated and hasattr(request.user.role == 'Supplier')
+        # if request.method in ['GET', 'HEAD', 'OPTIONS']:
+        #     return True
+        return request.user.is_authenticated and hasattr(request.user, 'supplier')

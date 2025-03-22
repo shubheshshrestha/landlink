@@ -21,3 +21,20 @@ class SupplierView(ModelViewSet):
     
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+from rest_framework import viewsets, status, permissions
+from rest_framework.response import Response
+from .models import Supplier
+from .serializers import SupplierSerializer
+from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+
+class SupplierCreateView(viewsets.ViewSet):
+    authentication_classes = [SessionAuthentication, TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]  # Only authenticated users can create
+
+    def create(self, request):
+        serializer = SupplierSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(user=request.user)  # Associate the current user
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -8,16 +8,16 @@ from customers.permissions import IsCustomer
 from rest_framework.authentication import SessionAuthentication, TokenAuthentication
 from customers.models import CustomerProfile
 
-class SupplierOrderView(viewsets.ReadOnlyModelViewSet): # Viewsets for suppliers to view orders containing their products
+class SupplierOrderView(viewsets.ReadOnlyModelViewSet):
     serializer_class = OrderSerializer
     authentication_classes = [SessionAuthentication, TokenAuthentication]
     permission_classes = [IsSupplierOrReadOnly]
 
-    def get_queryset(self): # Return orders that include products from the current supplier
+    def get_queryset(self):
         if self.request.user.role == 'Supplier':
             return Order.objects.filter(order_items__product__supplier=self.request.user).distinct()
         return Order.objects.none()
-    
+
 class CustomerOrderView(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     authentication_classes = [SessionAuthentication, TokenAuthentication]
@@ -27,9 +27,82 @@ class CustomerOrderView(viewsets.ModelViewSet):
         if not self.request.user.is_authenticated:
             return Order.objects.none()
         return Order.objects.filter(customer=self.request.user.customerprofile)
-    
+
     def perform_create(self, serializer):
         serializer.save(customer=self.request.user.customerprofile)
+
+    def create(self, request, *args, **kwargs):
+        print("Request Data:", request.data)
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        print("Validated Data:", serializer.validated_data)
+        serializer.save()
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+
+# from django.shortcuts import render
+# from rest_framework import viewsets, status
+# from rest_framework.response import Response
+# from .models import Order
+# from .serializers import OrderSerializer
+# from suppliers.permissions import IsSupplierOrReadOnly
+# from customers.permissions import IsCustomer
+# from rest_framework.authentication import SessionAuthentication, TokenAuthentication
+# from customers.models import CustomerProfile
+
+# class SupplierOrderView(viewsets.ReadOnlyModelViewSet): # Viewsets for suppliers to view orders containing their products
+#     serializer_class = OrderSerializer
+#     authentication_classes = [SessionAuthentication, TokenAuthentication]
+#     permission_classes = [IsSupplierOrReadOnly]
+
+#     def get_queryset(self): # Return orders that include products from the current supplier
+#         if self.request.user.role == 'Supplier':
+#             return Order.objects.filter(order_items__product__supplier=self.request.user).distinct()
+#         return Order.objects.none()
+
+# class CustomerOrderView(viewsets.ModelViewSet):
+#     serializer_class = OrderSerializer
+#     authentication_classes = [SessionAuthentication, TokenAuthentication]
+#     permission_classes = [IsCustomer]
+
+#     def get_queryset(self):
+#         if not self.request.user.is_authenticated:
+#             return Order.objects.none()
+#         return Order.objects.filter(customer=self.request.user.customerprofile)
+
+#     def perform_create(self, serializer):
+#         serializer.save(customer=self.request.user.customerprofile)
+
+#     def create(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         self.perform_create(serializer)
+#         headers = self.get_success_headers(serializer.data)
+#         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+# class SupplierOrderView(viewsets.ReadOnlyModelViewSet): # Viewsets for suppliers to view orders containing their products
+#     serializer_class = OrderSerializer
+#     authentication_classes = [SessionAuthentication, TokenAuthentication]
+#     permission_classes = [IsSupplierOrReadOnly]
+
+#     def get_queryset(self): # Return orders that include products from the current supplier
+#         if self.request.user.role == 'Supplier':
+#             return Order.objects.filter(order_items__product__supplier=self.request.user).distinct()
+#         return Order.objects.none()
+    
+# class CustomerOrderView(viewsets.ModelViewSet):
+#     serializer_class = OrderSerializer
+#     authentication_classes = [SessionAuthentication, TokenAuthentication]
+#     permission_classes = [IsCustomer]
+
+#     def get_queryset(self):
+#         if not self.request.user.is_authenticated:
+#             return Order.objects.none()
+#         return Order.objects.filter(customer=self.request.user.customerprofile)
+    
+#     def perform_create(self, serializer):
+#         serializer.save(customer=self.request.user.customerprofile)
 
 # class CustomerOrderView(viewsets.ModelViewSet): # Viewsets for customers to manage their own orders
 #     serializer_class = OrderSerializer

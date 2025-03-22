@@ -30,6 +30,9 @@ class ProductView(viewsets.ModelViewSet):
             return Product.objects.filter(
                 stock__gt=0
             )  #  Only show products with stock greater than 0
+    
+    def perform_create(self, serializer):
+        serializer.save(supplier=self.request.user.supplier) # Set the supplier
 
 
 
