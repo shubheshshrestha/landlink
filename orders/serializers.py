@@ -11,7 +11,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         read_only_fields = ['price', 'subtotal']
 
 class OrderSerializer(serializers.ModelSerializer):
-    items = OrderItemSerializer(many=True, read_only=True, source='order_items')
+    items = OrderItemSerializer(many=True)
     customer_details = serializers.SerializerMethodField()
 
     class Meta:
@@ -36,20 +36,26 @@ class OrderSerializer(serializers.ModelSerializer):
         items_data = validated_data.pop('items', [])  # Handle missing items gracefully.
         customer_profile = self.context['request'].user.customerprofile
         order = Order.objects.create(customer=customer_profile, **validated_data)
-        order.save() # Saving to fix the missing primary key issue
+        # order.save() # Saving to fix the missing primary key issue
 
         for item_data in items_data:
-            product = Product.objects.get(id=item_data['product'])
-            quantity = item_data['quantity']
-            OrderItem.objects.create(
-                order=order, # Use the saved order
-                product=product,
-                quantity=quantity,
-                price=product.price
-            )
+            item_data['order'] = order.id 
+            OrderItem.objects.create(**item_data)
 
-        order.save() # save the order again to recalculate the total price
+        order.save()
         return order
+    
+            # product = Product.objects.get(id=item_data['product'])
+            # quantity = item_data['quantity']
+            # OrderItem.objects.create(
+            #     order=order, # Use the saved order
+            #     product=product,
+            #     quantity=quantity,
+            #     price=product.price
+            # )
+
+        # order.save() # save the order again to recalculate the total price
+        # return order
 
 
 # from rest_framework import serializers
